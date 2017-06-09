@@ -1,6 +1,7 @@
 (ns lolstrategy2.views
   (:require [re-frame.core :as re-frame]
-            [re-com.core :as re-com]))
+            [re-com.core :as re-com]
+            [lolstrategy2.profile.views :as profile-views]))
 
 
 ;; home
@@ -47,6 +48,7 @@
   (case panel-name
     :home-panel [home-panel]
     :about-panel [about-panel]
+    :panel-profile [profile-views/main-panel]
     [:div]))
 
 (defn show-panel [panel-name]

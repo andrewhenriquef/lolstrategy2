@@ -6,7 +6,10 @@
             [lolstrategy2.subs]
             [lolstrategy2.routes :as routes]
             [lolstrategy2.views :as views]
-            [lolstrategy2.config :as config]))
+            [lolstrategy2.config :as config]
+            [lolstrategy2.profile.events]
+            [lolstrategy2.profile.views]
+            [lolstrategy2.profile.subs]))
 
 
 (defn dev-setup []
