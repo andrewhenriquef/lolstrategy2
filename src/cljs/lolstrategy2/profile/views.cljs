@@ -4,7 +4,6 @@
             [reagent.core :as reagent]
             [lolstrategy2.profile.subs :as subs]
             [lolstrategy2.profile.events :as events]
-            [re-frame-datatable.core :as dt]
             [cljs.pprint :as pprint]))
 
 
