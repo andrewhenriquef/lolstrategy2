@@ -112,8 +112,9 @@
     [re-com/button
      :label "Find"
      :on-click #(do
-                  (events/on-query-profile-basic-info)
-                  (events/on-query-champions))]]])
+                 (events/on-query-profile-basic-info)
+                 (events/on-query-champions)
+                 )]]])
 
 
 (defn perfil-data []
@@ -177,18 +178,19 @@
      [:div.navbar-header [:a.navbar-brand {:style {:color       :white
                                                    :font-family "Orbitron, sans-serif"
                                                    :font-size   "24px"}
-                                           :href "#/profile"} "LolStrategy"]]
+                                           :href  "#/profile"} "LolStrategy"]]
      [form]]
     [re-com/v-box
      :style {:background-image "url(/img/elise2.jpg)"
-             :text-align :center
-             :width "100%"
-             :height "300px"}
+             :text-align       :center
+             :width            "100%"
+             :height           "300px"}
      :children
      [[perfil-data]]]
 
     (when @(subs/profile-id)
       (do
+        (events/on-query-top-champions)
         (events/on-query-summary-info)
         [table-summary]))]])
 
