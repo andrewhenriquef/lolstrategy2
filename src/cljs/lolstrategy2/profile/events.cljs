@@ -60,11 +60,11 @@
 ;; GET summary-info
 ;;===============================================================
 
-
+;;take 8 champions and sort them by game played
 (reg-event-db
   ::on-query-summary-info-success
   (fn [db [_ {:keys [summonerId modifyDate champions]} resp]]
-    (assoc-in db [:panel/profile :summary-info] (take 7 champions))))
+    (assoc-in db [:panel/profile :summary-info] (rest (take 8 (sort-by (comp :totalSessionsPlayed :stats) > champions))))))
 
 (reg-event-db
   ::on-query-summary-info-failure
