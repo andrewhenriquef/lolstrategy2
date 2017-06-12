@@ -77,8 +77,13 @@
 (defn table-summary []
   [re-com/v-box
    :width "300px"
+   :style {:margin-top "30px"}
    :children
-   [[:table.table.table-hover
+   [[:span {:style {:color       "#1f8ecd"
+                    :font-family "Orbitron, sans-serif"
+                    :font-size   "18px"
+                    :text-align :center}} "CAMPEÕES MAIS JOGADOS"]
+    [:table.table.table-hover
      {:cell-spacing "0" :width "100%"}
      [:thead>tr
       [:th]
