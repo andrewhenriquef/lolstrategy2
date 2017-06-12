@@ -76,4 +76,12 @@
   []
   (subscribe [::champions]))
 
+(reg-sub
+  ::top-champions
+  (fn [db _]
+    (get-in db [:panel/profile :top-champions])))
 
+
+(defn top-champions
+  []
+  (subscribe [::top-champions]))
