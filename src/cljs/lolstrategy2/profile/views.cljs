@@ -173,54 +173,56 @@
 
 (defn perfil-data []
   [re-com/v-box
+   :style {:margin-top "20px"}
    :children
    [[re-com/h-box
+     :gap "30px"
      :children
-     [[:img {:src @(subs/profile-icon)}]
+     [
+      ;;insert elo realm here
+
+
+
+      ;;player lvl
+      [re-com/v-box
+       :children
+       [[re-com/h-box
+         :children
+         [[re-com/label
+           :label "Lvl"]
+          [re-com/title
+           :label @(subs/profile-summoner-level)
+           :level :level3]]]]]
+
+      ;;player id
+      [re-com/v-box
+       :children
+       [[re-com/h-box
+         :children
+         [[re-com/label
+           :label "ID:"]
+          [re-com/title
+           :label @(subs/profile-id)
+           :level :level3]]]]]
+
+      [:img {:src @(subs/profile-icon)
+             :style {:borderRadius "50%"
+                     :width        "150px"
+                     :height       "150px"}}]
 
       ;;player name
       [re-com/v-box
        :children
        [[re-com/h-box
          :children
-         [[re-com/label
-           :label "Name:"]
-          [re-com/title
+         [[re-com/title
            :label @(subs/profile-name)
-           :level :level3]]]
-
-        ;;player id
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "ID:"]
-            [re-com/title
-             :label @(subs/profile-id)
-             :level :level3]]]]]
-
-        ;;player finded
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "Finded"]
-            [re-com/title
-             :label @(subs/nickname)
-             :level :level3]]]]]
-
-        ;;player lvl
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "Lvl"]
-            [re-com/title
-             :label @(subs/profile-summoner-level)
-             :level :level3]]]]]]]]]]])
+           :style {:color       "#1f8ecd"
+                   :font-family "Orbitron, sans-serif"
+                   :font-size   "60px"
+                   :margin-left "10px"
+                   :font-style "italic"}]]]]]
+      ]]]])
 
 
 (defn main-panel []
