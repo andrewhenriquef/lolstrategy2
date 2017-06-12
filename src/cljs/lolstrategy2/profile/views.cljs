@@ -167,8 +167,7 @@
      :label "Find"
      :on-click #(do
                   (events/on-query-profile-basic-info)
-                  (events/on-query-champions)
-                  )]]])
+                  (events/on-query-champions))]]])
 
 
 (defn perfil-data []
@@ -180,7 +179,14 @@
      :children
      [
       ;;insert elo realm here
-
+      [re-com/v-box
+       :children
+       [[re-com/h-box
+         :children
+         [[:img {:src @(subs/ranked-league)
+                 :style {:borderRadius "50%"
+                         :width        "150px"
+                         :height       "150px"}}]]]]]
 
 
       ;;player lvl
@@ -248,6 +254,7 @@
       (do
         (events/on-query-top-champions)
         (events/on-query-summary-info)
+        (events/on-query-ranked-league)
         [re-com/h-box
          :gap "13px"
          :children

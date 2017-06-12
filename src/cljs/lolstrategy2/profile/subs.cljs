@@ -85,3 +85,14 @@
 (defn top-champions
   []
   (subscribe [::top-champions]))
+
+
+(reg-sub
+  ::ranked-league
+  (fn [db _]
+    (get-in db [:panel/profile :ranked-league])))
+
+
+(defn ranked-league
+  []
+  (subscribe [::ranked-league]))

@@ -3,7 +3,8 @@
             [day8.re-frame.http-fx]
             [re-frame.core :refer [reg-event-fx reg-event-db dispatch]]
             [lolstrategy2.profile.subs :as subs]
-            [re-frame.events :as events]))
+            [re-frame.events :as events]
+            [clojure.string :as str]))
 
 
 
@@ -54,6 +55,38 @@
 (defn on-query-champions
   []
   (dispatch [::on-query-champions]))
+
+
+;;===============================================================
+;; GET ranked-league
+;;===============================================================
+
+(reg-event-db
+  ::on-query-ranked-league-success
+  (fn [db [_ [{:keys [name tier queue entries]}] resp]]
+    (assoc-in db [:panel/profile :ranked-league]  (if tier
+                                                    (str "/img/"(str/lower-case tier) ".png")
+                                                    (str "/img/provisional.png")))))
+
+(reg-event-db
+  ::on-query-ranked-league-failure
+  (fn [db [_ resp]]
+    (println "Failure" resp)))
+
+
+(reg-event-fx
+  ::on-query-ranked-league
+  (fn [_ db]
+    {:http-xhrio {:method          :get
+                  :uri             (str "https://br1.api.riotgames.com/lol/league/v3/leagues/by-summoner/" @(subs/profile-id) "?api_key=RGAPI-5fca75ea-75dc-4c41-92ab-e79273937d79")
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::on-query-ranked-league-success]
+                  :on-failure      [::on-query-ranked-league-failure]}}))
+
+
+(defn on-query-ranked-league
+  []
+  (dispatch [::on-query-ranked-league]))
 
 
 ;;===============================================================
