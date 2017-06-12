@@ -64,8 +64,7 @@
 (reg-event-db
   ::on-query-summary-info-success
   (fn [db [_ {:keys [summonerId modifyDate champions]} resp]]
-    (assoc-in db [:panel/profile :summary-info] champions)))
-
+    (assoc-in db [:panel/profile :summary-info] (take 7 champions))))
 
 (reg-event-db
   ::on-query-summary-info-failure
@@ -89,6 +88,38 @@
 
 
 ;;===============================================================
+;; GET Top-champions
+;;===============================================================
+
+
+(reg-event-db
+  ::on-query-top-champions-success
+  (fn [db [_ resp]]
+        (assoc-in db [:panel/profile :top-champions] (take 3 resp))))
+
+
+(reg-event-db
+  ::on-query-top-champions-info-failure
+  (fn [db [_ failure]]
+    (println failure)))
+
+
+(reg-event-fx
+  ::on-query-top-champions
+  (fn [_ db]
+    {:http-xhrio {:method          :get
+                  :uri             (str "https://br1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/"@(subs/profile-id) "?api_key=RGAPI-5fca75ea-75dc-4c41-92ab-e79273937d79")
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::on-query-top-champions-success]
+                  :on-failure      [::on-query-top-champions-failure]}}))
+
+
+(defn on-query-top-champions
+  []
+  (dispatch [::on-query-top-champions]))
+
+
+;;===============================================================
 ;; GET profile-info
 ;;===============================================================
 
@@ -98,7 +129,6 @@
   (fn [db [_ {:keys [profileIconId name summonerLevel accountId id revisionDate]} resp]]
 
     (-> db
-        (dissoc :panel/profile)
         (assoc-in [:panel/profile :profile :profile/accountId] accountId)
         (assoc-in [:panel/profile :profile :profile/id] id)
         (assoc-in [:panel/profile :profile :profile/name] name)
@@ -126,4 +156,5 @@
 (defn on-query-profile-basic-info
   []
   (dispatch [::on-query-profile-basic-info]))
+
 
