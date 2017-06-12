@@ -25,6 +25,55 @@
       (get-in champions [r :name]))))
 
 
+(defn top-champions []
+  [re-com/v-box
+   :style {:margin-left "120px"
+           :margin-top "30px"}
+   :children
+   [[:span {:style {:color       "#1f8ecd"
+                    :font-family "Orbitron, sans-serif"
+                    :font-size   "20px"
+                    :text-align :center}} "MELHORES CAMPEÕES"]
+    [:pre {:style {:margin-top "10px"
+                   :align      :center}}
+     [:child
+      [re-com/h-box
+              :children [
+
+                         (map (fn [row]
+                                (let [top-image (str "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" (get-champion-image (get-in row [:championId])))
+                                      score (str (:championPoints row))
+                                      lvl (str "/img/mastery" (:championLevel row) ".png" )]
+                                  ^{:key (get-in row [:championId])}
+                                  [re-com/v-box
+                                   :align :center
+                                   :padding "7px"
+                                   :children [
+                                              [:img {:src   top-image
+                                                     :style {:borderRadius "50%"
+                                                             :width        "90px"
+                                                             :height       "90px"}}]
+
+                                              [:pre {:style {:padding    "7px"
+                                                             :margin-top "5px"}}
+
+                                               [:img {:src   lvl
+                                                      :style {:borderRadius "50%"
+                                                              :width        "90px"
+                                                              :height       "90px"}}]
+                                               [re-com/h-box
+                                                :align :center
+                                                :children [[:img {:src   (str "http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png")
+                                                                  :style {
+                                                                          :width  "25px"
+                                                                          :height "25px"}}]
+
+                                                           [:span {:style {:color       :red
+                                                                           :font-family "Orbitron, sans-serif"
+                                                                           :font-size   "14px"}} score]]]]]])) @(subs/top-champions))]]]
+     ]]])
+
+
 (defn table-summary []
   [re-com/v-box
    :width "300px"
@@ -113,7 +162,8 @@
      :label "Find"
      :on-click #(do
                   (events/on-query-profile-basic-info)
-                  (events/on-query-champions))]]])
+                  (events/on-query-champions)
+                  )]]])
 
 
 (defn perfil-data []
@@ -177,18 +227,23 @@
      [:div.navbar-header [:a.navbar-brand {:style {:color       :white
                                                    :font-family "Orbitron, sans-serif"
                                                    :font-size   "24px"}
-                                           :href "#/profile"} "LolStrategy"]]
+                                           :href  "#/profile"} "LolStrategy"]]
      [form]]
     [re-com/v-box
      :style {:background-image "url(/img/elise2.jpg)"
-             :text-align :center
-             :width "100%"
-             :height "300px"}
+             :text-align       :center
+             :width            "100%"
+             :height           "200px"}
      :children
      [[perfil-data]]]
 
     (when @(subs/profile-id)
       (do
+        (events/on-query-top-champions)
         (events/on-query-summary-info)
-        [table-summary]))]])
+        [re-com/h-box
+         :gap "13px"
+         :children
+         [[table-summary]
+          [top-champions]]]))]])
 
