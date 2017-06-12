@@ -43,7 +43,7 @@
                          (map (fn [row]
                                 (let [top-image (str "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" (get-champion-image (get-in row [:championId])))
                                       score (str (:championPoints row))
-                                      lvl (str (:championLevel row))]
+                                      lvl (str "/img/mastery" (:championLevel row) ".png" )]
                                   ^{:key (get-in row [:championId])}
                                   [re-com/v-box
                                    :align :center
@@ -56,7 +56,11 @@
 
                                               [:pre {:style {:padding    "7px"
                                                              :margin-top "5px"}}
-                                               [:span (str "Maestria: " lvl)]
+
+                                               [:img {:src   lvl
+                                                      :style {:borderRadius "50%"
+                                                              :width        "90px"
+                                                              :height       "90px"}}]
                                                [re-com/h-box
                                                 :align :center
                                                 :children [[:img {:src   (str "http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png")
@@ -229,7 +233,7 @@
      :style {:background-image "url(/img/elise2.jpg)"
              :text-align       :center
              :width            "100%"
-             :height           "300px"}
+             :height           "200px"}
      :children
      [[perfil-data]]]
 
