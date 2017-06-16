@@ -85,3 +85,24 @@
 (defn top-champions
   []
   (subscribe [::top-champions]))
+
+
+(reg-sub
+  ::ranked-league-img
+  (fn [db _]
+    (get-in db [:panel/profile :ranked-league :img])))
+
+
+(defn ranked-league-img
+  []
+  (subscribe [::ranked-league-img]))
+
+(reg-sub
+  ::ranked-league-tier
+  (fn [db _]
+    (get-in db [:panel/profile :ranked-league :tier])))
+
+
+(defn ranked-league-tier
+  []
+  (subscribe [::ranked-league-tier]))

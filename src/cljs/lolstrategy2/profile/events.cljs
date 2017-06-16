@@ -3,7 +3,8 @@
             [day8.re-frame.http-fx]
             [re-frame.core :refer [reg-event-fx reg-event-db dispatch]]
             [lolstrategy2.profile.subs :as subs]
-            [re-frame.events :as events]))
+            [re-frame.events :as events]
+            [clojure.string :as str]))
 
 
 
@@ -57,19 +58,57 @@
 
 
 ;;===============================================================
-;; GET summary-info
+;; GET ranked-league
 ;;===============================================================
+
+(reg-event-db
+  ::on-query-ranked-league-success
+  (fn [db [_ [{:keys [name tier queue entries]}] resp]]
+
+    (if tier
+      (-> db
+         (assoc-in [:panel/profile :ranked-league :tier] tier)
+         (assoc-in [:panel/profile :ranked-league :img] (str "/img/" (str/lower-case tier) ".png")))
+      (-> db
+          (assoc-in [:panel/profile :ranked-league :tier] "Unranked")
+          (assoc-in [:panel/profile :ranked-league :img] (str "/img/provisional.png"))))))
 
 
 (reg-event-db
+  ::on-query-ranked-league-failure
+  (fn [db [_ failure]]
+    db))
+
+
+(reg-event-fx
+  ::on-query-ranked-league
+  (fn [_ db]
+    {:http-xhrio {:method          :get
+                  :uri             (str "https://br1.api.riotgames.com/lol/league/v3/leagues/by-summoner/" @(subs/profile-id) "?api_key=RGAPI-5fca75ea-75dc-4c41-92ab-e79273937d79")
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::on-query-ranked-league-success]
+                  :on-failure      [::on-query-ranked-league-failure]}}))
+
+
+(defn on-query-ranked-league
+  []
+  (dispatch [::on-query-ranked-league]))
+
+
+;;===============================================================
+;; GET summary-info
+;;===============================================================
+
+;;take 8 champions and sort them by game played
+(reg-event-db
   ::on-query-summary-info-success
   (fn [db [_ {:keys [summonerId modifyDate champions]} resp]]
-    (assoc-in db [:panel/profile :summary-info] (take 7 champions))))
+    (assoc-in db [:panel/profile :summary-info] (rest (take 8 (sort-by (comp :totalSessionsPlayed :stats) > champions))))))
 
 (reg-event-db
   ::on-query-summary-info-failure
   (fn [db [_ resp]]
-    (println "Failure" resp)))
+    db))
 
 
 (reg-event-fx
@@ -101,7 +140,7 @@
 (reg-event-db
   ::on-query-top-champions-info-failure
   (fn [db [_ failure]]
-    (println failure)))
+    db))
 
 
 (reg-event-fx
@@ -140,7 +179,7 @@
 (reg-event-db
   ::on-query-profile-basic-info-failure
   (fn [db [_ failure]]
-    (println failure)))
+    db))
 
 
 (reg-event-fx

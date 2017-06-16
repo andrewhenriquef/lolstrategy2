@@ -28,57 +28,62 @@
 (defn top-champions []
   [re-com/v-box
    :style {:margin-left "120px"
-           :margin-top "30px"}
+           :margin-top  "30px"}
    :children
    [[:span {:style {:color       "#1f8ecd"
                     :font-family "Orbitron, sans-serif"
                     :font-size   "20px"
-                    :text-align :center}} "MELHORES CAMPEÕES"]
+                    :text-align  :center}} "MELHORES CAMPEÕES"]
     [:pre {:style {:margin-top "10px"
                    :align      :center}}
      [:child
       [re-com/h-box
-              :children [
+       :children [
 
-                         (map (fn [row]
-                                (let [top-image (str "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" (get-champion-image (get-in row [:championId])))
-                                      score (str (:championPoints row))
-                                      lvl (str "/img/mastery" (:championLevel row) ".png" )]
-                                  ^{:key (get-in row [:championId])}
-                                  [re-com/v-box
-                                   :align :center
-                                   :padding "7px"
-                                   :children [
-                                              [:img {:src   top-image
-                                                     :style {:borderRadius "50%"
-                                                             :width        "90px"
-                                                             :height       "90px"}}]
+                  (map (fn [row]
+                         (let [top-image (str "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" (get-champion-image (get-in row [:championId])))
+                               score (str (:championPoints row))
+                               lvl (str "/img/mastery" (:championLevel row) ".png")]
+                           ^{:key (get-in row [:championId])}
+                           [re-com/v-box
+                            :align :center
+                            :padding "7px"
+                            :children [
+                                       [:img {:src   top-image
+                                              :style {:borderRadius "50%"
+                                                      :width        "90px"
+                                                      :height       "90px"}}]
 
-                                              [:pre {:style {:padding    "7px"
-                                                             :margin-top "5px"}}
+                                       [:pre {:style {:padding    "7px"
+                                                      :margin-top "5px"}}
 
-                                               [:img {:src   lvl
-                                                      :style {:borderRadius "50%"
-                                                              :width        "90px"
-                                                              :height       "90px"}}]
-                                               [re-com/h-box
-                                                :align :center
-                                                :children [[:img {:src   (str "http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png")
-                                                                  :style {
-                                                                          :width  "25px"
-                                                                          :height "25px"}}]
+                                        [:img {:src   lvl
+                                               :style {:borderRadius "50%"
+                                                       :width        "90px"
+                                                       :height       "90px"}}]
+                                        [re-com/h-box
+                                         :align :center
+                                         :children [[:img {:src   (str "http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png")
+                                                           :style {
+                                                                   :width  "25px"
+                                                                   :height "25px"}}]
 
-                                                           [:span {:style {:color       :red
-                                                                           :font-family "Orbitron, sans-serif"
-                                                                           :font-size   "14px"}} score]]]]]])) @(subs/top-champions))]]]
+                                                    [:span {:style {:color       :red
+                                                                    :font-family "Orbitron, sans-serif"
+                                                                    :font-size   "14px"}} score]]]]]])) @(subs/top-champions))]]]
      ]]])
 
 
 (defn table-summary []
   [re-com/v-box
    :width "300px"
+   :style {:margin-top "30px"}
    :children
-   [[:table.table.table-hover
+   [[:span {:style {:color       "#1f8ecd"
+                    :font-family "Orbitron, sans-serif"
+                    :font-size   "18px"
+                    :text-align  :center}} "CAMPEÕES MAIS JOGADOS"]
+    [:table.table.table-hover
      {:cell-spacing "0" :width "100%"}
      [:thead>tr
       [:th]
@@ -162,60 +167,86 @@
      :label "Find"
      :on-click #(do
                   (events/on-query-profile-basic-info)
-                  (events/on-query-champions)
-                  )]]])
+                  (events/on-query-champions))]]])
 
 
 (defn perfil-data []
   [re-com/v-box
+   :style {:margin-top "20px"}
    :children
-   [[re-com/h-box
-     :children
-     [[:img {:src @(subs/profile-icon)}]
-
-      ;;player name
-      [re-com/v-box
+   [;;Elo realm image
+    (when @(subs/profile-id)
+      [re-com/h-box
+       :justify :around
        :children
-       [[re-com/h-box
+       [
+
+
+        [re-com/title
+         :label @(subs/profile-name)
+         :style {:color       "#1f8ecd"
+                 :font-family "Orbitron, sans-serif"
+                 :font-size   "80px"
+                 :font-style  "italic"}]
+
+        [:div]
+
+        [:img {:src   @(subs/profile-icon)
+               :style {:borderRadius "50%"
+                       :width        "170px"
+                       :height       "100%"
+                       :border       "6px solid"}}]
+
+        ;;ranked info
+        [re-com/v-box
+         :align :center
          :children
-         [[re-com/label
-           :label "Name:"]
+         [
+          ;;tier
           [re-com/title
-           :label @(subs/profile-name)
-           :level :level3]]]
+           :label @(subs/ranked-league-tier)
+           :style {:color       "#1f8ecd"
+                   :font-family "Orbitron, sans-serif"
+                   :font-size   "14px"
+                   :font-style  "italic"}]
+          ;;image realm
+          [:img {:src   @(subs/ranked-league-img)
+                 :style {:borderRadius "50%"
+                         :width        "170px"
+                         :height       "100%"}}]]]
 
-        ;;player id
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "ID:"]
-            [re-com/title
-             :label @(subs/profile-id)
-             :level :level3]]]]]
+        [:div]
+        ]])
 
-        ;;player finded
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "Finded"]
-            [re-com/title
-             :label @(subs/nickname)
-             :level :level3]]]]]
 
-        ;;player lvl
-        [re-com/v-box
-         :children
-         [[re-com/h-box
-           :children
-           [[re-com/label
-             :label "Lvl"]
-            [re-com/title
-             :label @(subs/profile-summoner-level)
-             :level :level3]]]]]]]]]]])
+
+    ;player name
+
+
+
+    ;;player lvl
+    [re-com/v-box
+     :children
+     [[re-com/h-box
+       :children
+       [[re-com/label
+         :label "Lvl"]
+        [re-com/title
+         :label @(subs/profile-summoner-level)
+         :level :level3]]]]]
+
+    ;;player id
+    [re-com/v-box
+     :children
+     [[re-com/h-box
+       :children
+       [[re-com/label
+         :label "ID:"]
+        [re-com/title
+         :label @(subs/profile-id)
+         :level :level3]]]]]
+
+    ]])
 
 
 (defn main-panel []
@@ -241,6 +272,7 @@
       (do
         (events/on-query-top-champions)
         (events/on-query-summary-info)
+        (events/on-query-ranked-league)
         [re-com/h-box
          :gap "13px"
          :children
