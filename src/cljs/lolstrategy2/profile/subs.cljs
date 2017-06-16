@@ -88,11 +88,21 @@
 
 
 (reg-sub
-  ::ranked-league
+  ::ranked-league-img
   (fn [db _]
-    (get-in db [:panel/profile :ranked-league])))
+    (get-in db [:panel/profile :ranked-league :img])))
 
 
-(defn ranked-league
+(defn ranked-league-img
   []
-  (subscribe [::ranked-league]))
+  (subscribe [::ranked-league-img]))
+
+(reg-sub
+  ::ranked-league-tier
+  (fn [db _]
+    (get-in db [:panel/profile :ranked-league :tier])))
+
+
+(defn ranked-league-tier
+  []
+  (subscribe [::ranked-league-tier]))

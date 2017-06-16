@@ -64,9 +64,12 @@
 (reg-event-db
   ::on-query-ranked-league-success
   (fn [db [_ [{:keys [name tier queue entries]}] resp]]
-    (assoc-in db [:panel/profile :ranked-league]  (if tier
-                                                    (str "/img/"(str/lower-case tier) ".png")
-                                                    (str "/img/provisional.png")))))
+    (-> db
+        (assoc-in [:panel/profile :ranked-league :tier] tier)
+        (assoc-in [:panel/profile :ranked-league :img]  (if tier
+                                                             (str "/img/"(str/lower-case tier) ".png")
+                                                             (str "/img/provisional.png"))))
+    ))
 
 (reg-event-db
   ::on-query-ranked-league-failure
