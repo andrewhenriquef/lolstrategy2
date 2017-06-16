@@ -64,17 +64,20 @@
 (reg-event-db
   ::on-query-ranked-league-success
   (fn [db [_ [{:keys [name tier queue entries]}] resp]]
-    (-> db
-        (assoc-in [:panel/profile :ranked-league :tier] tier)
-        (assoc-in [:panel/profile :ranked-league :img]  (if tier
-                                                             (str "/img/"(str/lower-case tier) ".png")
-                                                             (str "/img/provisional.png"))))
-    ))
+
+    (if tier
+      (-> db
+         (assoc-in [:panel/profile :ranked-league :tier] tier)
+         (assoc-in [:panel/profile :ranked-league :img] (str "/img/" (str/lower-case tier) ".png")))
+      (-> db
+          (assoc-in [:panel/profile :ranked-league :tier] "Unranked")
+          (assoc-in [:panel/profile :ranked-league :img] (str "/img/provisional.png"))))))
+
 
 (reg-event-db
   ::on-query-ranked-league-failure
-  (fn [db [_ resp]]
-    (println "Failure" resp)))
+  (fn [db [_ failure]]
+    db))
 
 
 (reg-event-fx
@@ -105,7 +108,7 @@
 (reg-event-db
   ::on-query-summary-info-failure
   (fn [db [_ resp]]
-    (println "Failure" resp)))
+    db))
 
 
 (reg-event-fx
@@ -137,7 +140,7 @@
 (reg-event-db
   ::on-query-top-champions-info-failure
   (fn [db [_ failure]]
-    (println failure)))
+    db))
 
 
 (reg-event-fx
@@ -176,7 +179,7 @@
 (reg-event-db
   ::on-query-profile-basic-info-failure
   (fn [db [_ failure]]
-    (println failure)))
+    db))
 
 
 (reg-event-fx
