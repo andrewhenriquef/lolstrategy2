@@ -58,7 +58,7 @@
                                        [:span {:style {:color       "#1f8ecd"
                                                        :font-family "Orbitron, sans-serif"
                                                        :font-size   "14px"
-                                                       :margin-top "5px"}} champion-name]
+                                                       :margin-top  "5px"}} champion-name]
 
                                        [:pre {:style {:padding    "7px"
                                                       :margin-top "5px"}}
@@ -127,9 +127,11 @@
                                    :font-size   "14px"
                                    :font-weight :bold
                                    :margin-top  "10px"
-                                   :align       :left}} champion-name]
+                                   :align       :left
+                                   :color       "#444444"}} champion-name]
                    [:span {:style {:font-family "Orbitron, sans-serif"
-                                   :font-size   "12px"}} (str "CS: " cs)]]]]
+                                   :font-size   "12px"
+                                   :color       "#444444"}} (str "CS: " cs)]]]]
 
                 ;;kda
                 [:td {:style {:padding "5px"}}
@@ -140,7 +142,8 @@
                                              :font-size   "18px"
                                              :margin-top  "7px"}} (str kdaratio ":1 AMA")]
                              [:span {:style {:font-family "Orbitron, sans-serif"
-                                             :font-size   "18px"}} kda]]]]
+                                             :font-size   "18px"
+                                             :color       "#444444"}} kda]]]]
 
                 ;;win-ratio
                 [:td
@@ -197,7 +200,8 @@
                :style {:borderRadius "50%"
                        :width        "170px"
                        :height       "100%"
-                       :border       "6px solid"}}]
+                       :border       "6px solid"
+                       :border-color "#444444"}}]
 
         ;;ranked info
         [re-com/v-box
@@ -239,7 +243,7 @@
       [:th]
       [:th]]
      [:tbody
-      [:tr ;;TOP-lane
+      [:tr                                                  ;;TOP-lane
        ^{:key (:top @(subs/match-recent))}
 
        [:td [:img {:src   "/img/top.png"
@@ -248,8 +252,8 @@
                            :height       "20px"}}]]
 
        [:td {:style
-             {:width         "150px"
-              :background    (str "linear-gradient(to right, #1f8ecd " (:top @(subs/match-recent)) "%, white " (- (:top @(subs/match-recent)) 100) "%)")}}]
+             {:width      "150px"
+              :background (str "linear-gradient(to right, #1f8ecd " (:top @(subs/match-recent)) "%, white " (- (:top @(subs/match-recent)) 100) "%)")}}]
 
        [:td [:span {:style {:color       "red"
                             :font-family "Orbitron, sans-serif"
@@ -257,7 +261,7 @@
                             }} (str (:top @(subs/match-recent)) "%")]]
        ]
 
-      [:tr  ;;Jungle
+      [:tr                                                  ;;Jungle
        ^{:key (:jungle @(subs/match-recent))}
        [:td [:img {:src   "/img/jungle.png"
                    :style {:borderRadius "50%"
@@ -265,15 +269,15 @@
                            :height       "20px"}}]]
 
        [:td {:style
-             {:width         "150px"
-              :background    (str "linear-gradient(to right, #1f8ecd " (:jungle @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
+             {:width      "150px"
+              :background (str "linear-gradient(to right, #1f8ecd " (:jungle @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
 
        [:td [:span {:style {:color       "red"
                             :font-family "Orbitron, sans-serif"
                             :font-size   "14px"
                             }} (str (:jungle @(subs/match-recent)) "%")]]]
 
-      [:tr  ;;Mid
+      [:tr                                                  ;;Mid
        ^{:key (:mid @(subs/match-recent))}
        [:td [:img {:src   "/img/mid.png"
                    :style {:borderRadius "50%"
@@ -281,15 +285,15 @@
                            :height       "20px"}}]]
 
        [:td {:style
-             {:width         "150px"
-              :background    (str "linear-gradient(to right, #1f8ecd " (:mid @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
+             {:width      "150px"
+              :background (str "linear-gradient(to right, #1f8ecd " (:mid @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
 
        [:td [:span {:style {:color       "red"
                             :font-family "Orbitron, sans-serif"
                             :font-size   "14px"
                             }} (str (:mid @(subs/match-recent)) "%")]]]
 
-      [:tr  ;;Marksman
+      [:tr                                                  ;;Marksman
        ^{:key (:marksman @(subs/match-recent))}
        [:td [:img {:src   "/img/bottom.png"
                    :style {:borderRadius "50%"
@@ -297,15 +301,15 @@
                            :height       "20px"}}]]
 
        [:td {:style
-             {:width         "150px"
-              :background    (str "linear-gradient(to right, #1f8ecd " (:marksman @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
+             {:width      "150px"
+              :background (str "linear-gradient(to right, #1f8ecd " (:marksman @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
 
        [:td [:span {:style {:color       "red"
                             :font-family "Orbitron, sans-serif"
                             :font-size   "14px"
                             }} (str (:marksman @(subs/match-recent)) "%")]]]
 
-      [:tr  ;;Support
+      [:tr                                                  ;;Support
        ^{:key (:support @(subs/match-recent))}
        [:td [:img {:src   "/img/support.png"
                    :style {:borderRadius "50%"
@@ -313,8 +317,8 @@
                            :height       "20px"}}]]
 
        [:td {:style
-             {:width         "150px"
-              :background    (str "linear-gradient(to right, #1f8ecd " (:support @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
+             {:width      "150px"
+              :background (str "linear-gradient(to right, #1f8ecd " (:support @(subs/match-recent)) "%, white " (- (:marksman @(subs/match-recent)) 100) "%)")}}]
 
        [:td [:span {:style {:color       "red"
                             :font-family "Orbitron, sans-serif"
