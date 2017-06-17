@@ -159,6 +159,48 @@
 
 
 ;;===============================================================
+;; GET match-recent
+;;===============================================================
+
+(reg-event-db
+  ::on-query-match-recent-success
+  (fn [db [_ {:keys [matches]} resp]]
+    (-> db
+        (assoc-in [:panel/profile :match-recent :matches] matches)
+        (assoc-in [:panel/profile :match-recent :jungle] (/ (* (count (filter #(if (= (:lane %) "JUNGLE")
+                                                                                 (:lane %)) matches)) 100) 20))
+        (assoc-in [:panel/profile :match-recent :mid] (/ (* (count (filter #(if (= (:lane %) "MID")
+                                                                                 (:lane %)) matches)) 100) 20))
+        (assoc-in [:panel/profile :match-recent :top] (/ (* (count (filter #(if (= (:lane %) "TOP")
+                                                                                 (:lane %)) matches)) 100) 20))
+        (assoc-in [:panel/profile :match-recent :marksman](/ (* (count (filter #(and (= (:lane %) "BOTTOM") (= (:role %) "DUO_CARRY")
+                                                                                  (:lane %)) matches)) 100) 20))
+        (assoc-in [:panel/profile :match-recent :support](/ (* (count (filter #(and (= (:lane %) "BOTTOM") (= (:role %) "DUO_SUPPORT")
+                                                                                     (:lane %)) matches)) 100) 20)))))
+
+
+(reg-event-db
+  ::on-query-match-recent-failure
+  (fn [db [_ failure]]
+    db))
+
+
+(reg-event-fx
+  ::on-query-match-recent
+  (fn [_ db]
+    {:http-xhrio {:method          :get
+                  :uri             (str "https://br1.api.riotgames.com/lol/match/v3/matchlists/by-account/" (:profile/accountId @(subs/profile)) "/recent?api_key=RGAPI-5fca75ea-75dc-4c41-92ab-e79273937d79")
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [::on-query-match-recent-success]
+                  :on-failure      [::on-query-match-recent-failure]}}))
+
+
+(defn on-query-match-recent
+  []
+  (dispatch [::on-query-match-recent]))
+
+
+;;===============================================================
 ;; GET profile-info
 ;;===============================================================
 

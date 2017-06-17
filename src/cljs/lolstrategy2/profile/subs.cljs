@@ -3,6 +3,17 @@
 
 
 (reg-sub
+  ::profile
+  (fn [db _]
+    (get-in db [:panel/profile :profile])))
+
+
+(defn profile
+  []
+  (subscribe [::profile]))
+
+
+(reg-sub
   ::profile-nickname
   (fn [db _]
     (or (get-in db [:panel/profile :profile :profile/nickname]) "")))
@@ -106,3 +117,14 @@
 (defn ranked-league-tier
   []
   (subscribe [::ranked-league-tier]))
+
+
+(reg-sub
+  ::match-recent
+  (fn [db _]
+    (get-in db [:panel/profile :match-recent])))
+
+
+(defn match-recent
+  []
+  (subscribe [::match-recent]))
