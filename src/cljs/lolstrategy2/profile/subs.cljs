@@ -3,6 +3,17 @@
 
 
 (reg-sub
+  ::profile
+  (fn [db _]
+    (get-in db [:panel/profile :profile])))
+
+
+(defn profile
+  []
+  (subscribe [::profile]))
+
+
+(reg-sub
   ::profile-nickname
   (fn [db _]
     (or (get-in db [:panel/profile :profile :profile/nickname]) "")))

@@ -273,6 +273,7 @@
         (events/on-query-top-champions)
         (events/on-query-summary-info)
         (events/on-query-ranked-league)
+        (events/on-query-match-recent)
         [re-com/h-box
          :gap "13px"
          :children
