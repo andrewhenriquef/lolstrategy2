@@ -43,7 +43,8 @@
                   (map (fn [row]
                          (let [top-image (str "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" (get-champion-image (get-in row [:championId])))
                                score (str (:championPoints row))
-                               lvl (str "/img/mastery" (:championLevel row) ".png")]
+                               lvl (str "/img/mastery" (:championLevel row) ".png")
+                               champion-name (str (get-champion-name (:championId row)))]
                            ^{:key (get-in row [:championId])}
                            [re-com/v-box
                             :align :center
@@ -53,6 +54,11 @@
                                               :style {:borderRadius "50%"
                                                       :width        "90px"
                                                       :height       "90px"}}]
+
+                                       [:span {:style {:color       "#1f8ecd"
+                                                       :font-family "Orbitron, sans-serif"
+                                                       :font-size   "14px"
+                                                       :margin-top "5px"}} champion-name]
 
                                        [:pre {:style {:padding    "7px"
                                                       :margin-top "5px"}}
@@ -90,7 +96,6 @@
       [:th]
       [:th]
       [:th]]
-     ;;TODO dont show if id equals 0 , order by win ratio or played matchs, show only x champions
      [:tbody
       (map (fn [row]
              (let [k (/ (get-in row [:stats :totalChampionKills]) (get-in row [:stats :totalSessionsPlayed]))
@@ -179,9 +184,7 @@
       [re-com/h-box
        :justify :around
        :children
-       [
-
-        [re-com/title
+       [[re-com/title
          :label @(subs/profile-name)
          :style {:color       "#1f8ecd"
                  :font-family "Orbitron, sans-serif"
@@ -216,35 +219,6 @@
 
         [:div]
         ]])
-
-
-
-    ;player name
-
-
-
-    ;;player lvl
-    [re-com/v-box
-     :children
-     [[re-com/h-box
-       :children
-       [[re-com/label
-         :label "Lvl"]
-        [re-com/title
-         :label @(subs/profile-summoner-level)
-         :level :level3]]]]]
-
-    ;;player id
-    [re-com/v-box
-     :children
-     [[re-com/h-box
-       :children
-       [[re-com/label
-         :label "ID:"]
-        [re-com/title
-         :label @(subs/profile-id)
-         :level :level3]]]]]
-
     ]])
 
 
@@ -378,6 +352,7 @@
         (events/on-query-ranked-league)
         (events/on-query-match-recent)
         [re-com/h-box
+         :style {:padding-left "30px"}
          :gap "13px"
          :children
          [[table-summary]
