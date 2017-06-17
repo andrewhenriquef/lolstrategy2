@@ -105,6 +105,7 @@
   (fn [db [_ {:keys [summonerId modifyDate champions]} resp]]
     (assoc-in db [:panel/profile :summary-info] (rest (take 8 (sort-by (comp :totalSessionsPlayed :stats) > champions))))))
 
+
 (reg-event-db
   ::on-query-summary-info-failure
   (fn [db [_ resp]]
@@ -210,6 +211,7 @@
   (fn [db [_ {:keys [profileIconId name summonerLevel accountId id revisionDate]} resp]]
 
     (-> db
+        (dissoc :panel/profile)
         (assoc-in [:panel/profile :profile :profile/accountId] accountId)
         (assoc-in [:panel/profile :profile :profile/id] id)
         (assoc-in [:panel/profile :profile :profile/name] name)
